@@ -2,6 +2,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { Cat, Story, AdoptionRequest, User } from '@/types';
 
+// Public Stats
+export const usePublicStats = () => {
+  return useQuery<{ totalCats: number; totalUsers: number; totalAdoptions: number }>({
+    queryKey: ['stats'],
+    queryFn: async () => {
+      const res = await api.get('/api/stats');
+      return res.data;
+    }
+  });
+};
+
 // Cats
 export const useCats = (filters?: Record<string, string>) => {
   return useQuery<Cat[]>({
@@ -29,9 +40,7 @@ export const useCreateCat = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: FormData) => {
-      const res = await api.post('/api/cats', data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const res = await api.post('/api/cats', data);
       return res.data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cats'] })
@@ -48,6 +57,7 @@ export const useUpdateCat = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cats'] });
       queryClient.invalidateQueries({ queryKey: ['cat'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cats'] });
     }
   });
 };
@@ -157,18 +167,6 @@ export const useRejectRequest = () => {
       return res.data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adoptions'] })
-  });
-};
-
-// Auth
-export const useAuth = () => {
-  return useQuery<User>({
-    queryKey: ['auth', 'me'],
-    queryFn: async () => {
-      const res = await api.get('/api/auth/me');
-      return res.data;
-    },
-    retry: false
   });
 };
 
