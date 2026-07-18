@@ -300,6 +300,56 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* Cat Health Tips Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900">Cat Health Tips</h2>
+            <p className="text-gray-600 mt-2">Keep your feline friend healthy and happy</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { title: "Regular Vet Visits", desc: "Schedule annual check-ups to catch health issues early. Vaccinations and dental cleanings are essential.", icon: "🩺" },
+              { title: "Balanced Diet", desc: "Feed high-quality cat food appropriate for their age. Always provide fresh, clean water.", icon: "🍽️" },
+              { title: "Daily Exercise", desc: "Engage your cat with interactive toys for at least 15 minutes daily to prevent obesity.", icon: "🏃" },
+              { title: "Grooming Routine", desc: "Brush your cat regularly to reduce hairballs and maintain a healthy coat.", icon: "✨" },
+            ].map((tip) => (
+              <div key={tip.title} className="bg-white rounded-2xl p-6 shadow hover:shadow-lg transition-shadow text-center">
+                <div className="text-4xl mb-4">{tip.icon}</div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{tip.title}</h3>
+                <p className="text-gray-600 text-sm">{tip.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cat Training Tips Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900">Cat Training Tips</h2>
+            <p className="text-gray-600 mt-2">Simple tips to help your cat adjust to their new home</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { title: "Litter Box Training", desc: "Most cats adapt quickly. Place the box in a quiet location and keep it clean daily.", icon: "📦" },
+              { title: "Scratching Posts", desc: "Provide scratching posts to save your furniture. Reward your cat when they use them.", icon: "🪵" },
+              { title: "Positive Reinforcement", desc: "Use treats and praise to reward good behavior. Never punish — cats respond to patience.", icon: " Treats" },
+              { title: "Safe Spaces", desc: "Create cozy hiding spots with boxes or cat trees so your cat feels secure in their new environment.", icon: "🏠" },
+            ].map((tip) => (
+              <div key={tip.title} className="bg-emerald-50 rounded-2xl p-6 shadow hover:shadow-lg transition-shadow text-center">
+                <div className="text-4xl mb-4">{tip.icon}</div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{tip.title}</h3>
+                <p className="text-gray-600 text-sm">{tip.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }
