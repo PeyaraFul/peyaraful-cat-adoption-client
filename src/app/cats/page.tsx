@@ -68,7 +68,7 @@ export default function CatsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Name, breed..."
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm text-gray-900"
           />
         </div>
       </div>
@@ -79,7 +79,7 @@ export default function CatsPage() {
         <select
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm text-gray-900"
         >
           <option value="">All Locations</option>
           {LOCATIONS.map((loc) => (
@@ -94,7 +94,7 @@ export default function CatsPage() {
         <select
           value={gender}
           onChange={(e) => setGender(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm text-gray-900"
         >
           <option value="">All Genders</option>
           {GENDERS.map((g) => (
@@ -109,7 +109,7 @@ export default function CatsPage() {
         <select
           value={age}
           onChange={(e) => setAge(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm text-gray-900"
         >
           {AGE_RANGES.map((a) => (
             <option key={a.value} value={a.value}>{a.label}</option>
