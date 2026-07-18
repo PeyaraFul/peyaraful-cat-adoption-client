@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaSearch, FaSlidersH, FaTimes } from "react-icons/fa";
 import { useCats } from "@/hooks/useApi";
 import CatCard from "@/components/CatCard";
 import CatCardSkeleton from "@/components/skeletons/CatCardSkeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 const LOCATIONS = ["Dhaka", "Chattogram", "Sylhet", "Rajshahi", "Khulna", "Barishal", "Rangpur", "Mymensingh"];
 const GENDERS = ["male", "female"];
@@ -19,6 +20,14 @@ const AGE_RANGES = [
 ];
 
 export default function CatsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 py-10"><div className="max-w-7xl mx-auto px-4 space-y-6"><Skeleton className="h-10 w-64" /></div></div>}>
+      <CatsContent />
+    </Suspense>
+  );
+}
+
+function CatsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 

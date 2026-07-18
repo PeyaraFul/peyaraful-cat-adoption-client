@@ -39,7 +39,11 @@ export const useCat = (id: string) => {
 export const useCreateCat = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: FormData) => {
+    mutationFn: async (data: {
+      name: string; age: number; breed: string; photo: string;
+      description?: string; location: string; gender?: string;
+      healthStatus?: string; vaccinationStatus?: string; temperament?: string;
+    }) => {
       const res = await api.post('/api/cats', data);
       return res.data;
     },
