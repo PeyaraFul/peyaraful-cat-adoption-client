@@ -170,6 +170,18 @@ export const useRejectRequest = () => {
   });
 };
 
+// Profile
+export const useUpdateProfile = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: { name?: string; phone?: string; location?: string; bio?: string; image?: string }) => {
+      const res = await api.put('/api/auth/profile', data);
+      return res.data;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['auth', 'me'] })
+  });
+};
+
 // Admin
 export const useAdminStats = () => {
   return useQuery({
