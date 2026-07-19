@@ -30,11 +30,20 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-3">Developer</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>Name: Peyaraful Team</li>
-              <li>Email: contact@peyaraful.com</li>
+              <li>Akash Mia</li>
+              <li>
+                <a href="mailto:arakash022@gmail.com" className="hover:text-emerald-400 transition-colors">
+                  arakash022@gmail.com
+                </a>
+              </li>
               <li>
                 <a href="https://github.com/PeyaraFul" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
                   GitHub: @PeyaraFul
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/md-akash-mia-bd" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
+                  LinkedIn: md-akash-mia-bd
                 </a>
               </li>
             </ul>
