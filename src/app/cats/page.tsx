@@ -160,7 +160,7 @@ function CatsContent() {
           </aside>
 
           {/* Mobile Filter Button */}
-          <div className="lg:hidden fixed bottom-24 left-6 z-30">
+          <div className="lg:hidden fixed top-20 right-6 z-30">
             <button
               onClick={() => setMobileFilterOpen(true)}
               className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-emerald-700 transition-colors"
