@@ -45,7 +45,7 @@ function CatsContent() {
   if (age) filters.age = age;
 
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useInfiniteCats(filters);
-  const cats = data?.pages.flatMap((p) => p.cats) ?? [];
+  const cats = data?.pages.flatMap((p) => p.cats).filter(Boolean) ?? [];
   const totalCount = data?.pages[0]?.total ?? 0;
 
   // Sync URL params on change
@@ -237,7 +237,7 @@ function CatsContent() {
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {cats.map((cat) => (
+                  {cats.filter((c) => c?._id).map((cat) => (
                     <CatCard key={cat._id} cat={cat} />
                   ))}
                 </div>
