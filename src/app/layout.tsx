@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers from "@/providers/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ChatBubble from "@/components/chat/ChatBubble";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <ChatBubble />
         </Providers>
       </body>
     </html>

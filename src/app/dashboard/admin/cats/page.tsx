@@ -78,7 +78,7 @@ export default function AdminCatsPage() {
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">{cat.name}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">{cat.breed}</td>
-                      <td className="px-6 py-4 text-sm capitalize">{cat.gender}</td>
+                      <td className="px-6 py-4 text-sm text-gray-600 capitalize">{cat.gender}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">{cat.location}</td>
                       <td className="px-6 py-4">
                         <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
