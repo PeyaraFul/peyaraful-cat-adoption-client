@@ -195,8 +195,8 @@ function CatsContent() {
           {/* Cat Grid */}
           <main className="flex-1">
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, i) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, i) => (
                   <CatCardSkeleton key={i} />
                 ))}
               </div>
@@ -213,7 +213,7 @@ function CatsContent() {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {cats.map((cat) => (
                   <CatCard key={cat._id} cat={cat} />
                 ))}
