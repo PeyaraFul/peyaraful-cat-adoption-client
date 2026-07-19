@@ -1,15 +1,22 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeft, FaMapMarkerAlt, FaHeart } from "react-icons/fa";
-import { useCat } from "@/hooks/useApi";
+import { useCat, useCreateAdoption } from "@/hooks/useApi";
+import { useAuth } from "@/providers/AuthProvider";
 import { Skeleton } from "@/components/ui/Skeleton";
+import toast from "react-hot-toast";
 
 export default function CatDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: cat, isLoading, error } = useCat(id);
+  const { user } = useAuth();
+  const router = useRouter();
+  const createAdoption = useCreateAdoption();
+  const [requested, setRequested] = useState(false);
 
   if (isLoading) {
     return (
@@ -123,10 +130,39 @@ export default function CatDetailPage() {
 
             {/* Request to Adopt */}
             <div className="pt-4 border-t">
-              <button className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl transition-colors text-lg">
-                <FaHeart />
-                Request to Adopt
-              </button>
+              {user ? (
+                user._id === cat.ownerId ? (
+                  <div className="w-full text-center py-4 text-gray-500 font-medium bg-gray-100 rounded-xl">
+                    This is your cat listing
+                  </div>
+                ) : requested ? (
+                  <div className="w-full text-center py-4 text-emerald-600 font-medium bg-emerald-50 rounded-xl">
+                    Adoption request sent!
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      createAdoption.mutate(
+                        { catId: cat._id, message: `I'd like to adopt ${cat.name}` },
+                        { onSuccess: () => setRequested(true) }
+                      );
+                    }}
+                    disabled={createAdoption.isPending}
+                    className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-bold py-4 rounded-xl transition-colors text-lg"
+                  >
+                    <FaHeart />
+                    {createAdoption.isPending ? "Sending Request..." : "Request to Adopt"}
+                  </button>
+                )
+              ) : (
+                <button
+                  onClick={() => router.push("/login")}
+                  className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl transition-colors text-lg"
+                >
+                  <FaHeart />
+                  Login to Adopt
+                </button>
+              )}
             </div>
           </div>
         </div>

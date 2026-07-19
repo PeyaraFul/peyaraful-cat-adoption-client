@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaCat, FaPaperPlane, FaInbox, FaPlus } from "react-icons/fa";
+import { FaCat, FaPaperPlane, FaInbox, FaPlus, FaShieldAlt } from "react-icons/fa";
 import { useAuth } from "@/providers/AuthProvider";
 import { useCats, useSentRequests, useReceivedRequests } from "@/hooks/useApi";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -116,6 +116,15 @@ export default function DashboardPage() {
             >
               Share a Story
             </Link>
+            {user?.role === "admin" && (
+              <Link
+                href="/dashboard/admin"
+                className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-xl transition-colors"
+              >
+                <FaShieldAlt />
+                Admin Panel
+              </Link>
+            )}
           </div>
         </div>
       </div>
