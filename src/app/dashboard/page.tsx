@@ -81,13 +81,13 @@ export default function DashboardPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">{card.title}</p>
-                <p className="text-3xl font-extrabold text-gray-900">
+                <div className="text-3xl font-extrabold text-gray-900">
                   {catsLoading || sentLoading || receivedLoading ? (
                     <Skeleton className="h-8 w-12 inline-block" />
                   ) : (
                     card.count
                   )}
-                </p>
+                </div>
               </div>
             </Link>
           ))}
