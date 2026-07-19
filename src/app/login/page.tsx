@@ -1,16 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '@/providers/AuthProvider';
 import api from '@/lib/axios';
 import toast from 'react-hot-toast';
-import { FaCat } from 'react-icons/fa';
+import { FaCat, FaUser } from 'react-icons/fa';
 
 export default function LoginPage() {
   const { user, loading, login } = useAuth();
   const router = useRouter();
+  const [demoLoading, setDemoLoading] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
@@ -44,6 +45,19 @@ export default function LoginPage() {
     toast.error('Google login failed. Please try again.');
   };
 
+  const handleDemoLogin = async () => {
+    setDemoLoading(true);
+    try {
+      const res = await api.post('/api/auth/demo');
+      await login(res.data.token);
+      toast.success('Logged in as Demo User!');
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Demo login failed.');
+    } finally {
+      setDemoLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
@@ -55,7 +69,7 @@ export default function LoginPage() {
           <p className="text-gray-500 mt-2">Sign in to Peyaraful Cat Adoption</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-lg p-8 space-y-4">
           <div className="flex justify-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
@@ -67,7 +81,31 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="mt-6 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-3 bg-white text-gray-400">or</span>
+            </div>
+          </div>
+
+          <button
+            onClick={handleDemoLogin}
+            disabled={demoLoading}
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow transition-colors disabled:opacity-50"
+          >
+            <FaUser />
+            {demoLoading ? 'Signing in...' : 'Demo Login'}
+          </button>
+
+          <div className="text-center">
+            <p className="text-xs text-gray-400">
+              Demo: demo@user.com / Demo User
+            </p>
+          </div>
+
+          <div className="text-center">
             <p className="text-xs text-gray-400">
               By signing in, you agree to our Terms of Service and Privacy Policy.
             </p>
