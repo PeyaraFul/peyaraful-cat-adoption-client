@@ -73,7 +73,7 @@ export default function Navbar() {
                 </Link>
                 <div className="flex items-center gap-2">
                   {user.image ? (
-                    <img src={user.image} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+                    <img src={user.image} alt={user.name} referrerPolicy="no-referrer" className="w-8 h-8 rounded-full object-cover" />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">
                       {user.name?.charAt(0).toUpperCase() || 'U'}
@@ -143,7 +143,7 @@ export default function Navbar() {
               <>
                 <div className="flex items-center gap-3 px-3 py-2">
                   {user.image ? (
-                    <img src={user.image} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+                    <img src={user.image} alt={user.name} referrerPolicy="no-referrer" className="w-8 h-8 rounded-full object-cover" />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">
                       {user.name?.charAt(0).toUpperCase() || 'U'}

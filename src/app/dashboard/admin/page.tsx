@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useAdminStats } from "@/hooks/useApi";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { FaCat, FaUsers, FaCheckCircle, FaClock, FaTimesCircle } from "react-icons/fa";
@@ -37,11 +38,11 @@ export default function AdminDashboardPage() {
   ];
 
   const summaryCards = [
-    { label: "Total Cats", value: stats?.totalCats ?? 0, icon: <FaCat />, color: "bg-emerald-100 text-emerald-700" },
-    { label: "Total Users", value: stats?.totalUsers ?? 0, icon: <FaUsers />, color: "bg-blue-100 text-blue-700" },
-    { label: "Adopted", value: stats?.totalAdoptions ?? 0, icon: <FaCheckCircle />, color: "bg-purple-100 text-purple-700" },
-    { label: "Pending", value: stats?.pendingAdoptions ?? 0, icon: <FaClock />, color: "bg-yellow-100 text-yellow-700" },
-    { label: "Rejected", value: stats?.rejectedAdoptions ?? 0, icon: <FaTimesCircle />, color: "bg-red-100 text-red-700" },
+    { label: "Total Cats", value: stats?.totalCats ?? 0, icon: <FaCat />, color: "bg-emerald-100 text-emerald-700", href: "/dashboard/admin/cats" },
+    { label: "Total Users", value: stats?.totalUsers ?? 0, icon: <FaUsers />, color: "bg-blue-100 text-blue-700", href: "/dashboard/admin/users" },
+    { label: "Adopted", value: stats?.totalAdoptions ?? 0, icon: <FaCheckCircle />, color: "bg-purple-100 text-purple-700", href: "/dashboard/admin/adoption" },
+    { label: "Pending", value: stats?.pendingAdoptions ?? 0, icon: <FaClock />, color: "bg-yellow-100 text-yellow-700", href: "/dashboard/admin/adoption?status=pending" },
+    { label: "Rejected", value: stats?.rejectedAdoptions ?? 0, icon: <FaTimesCircle />, color: "bg-red-100 text-red-700", href: "/dashboard/admin/adoption?status=rejected" },
   ];
 
   return (
@@ -57,13 +58,17 @@ export default function AdminDashboardPage() {
         {/* Summary Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {summaryCards.map((card) => (
-            <div key={card.label} className="bg-white rounded-2xl shadow p-5">
+            <Link
+              key={card.label}
+              href={card.href}
+              className="bg-white rounded-2xl shadow p-5 hover:shadow-lg transition-shadow cursor-pointer block"
+            >
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${card.color} mb-3`}>
                 {card.icon}
               </div>
               <p className="text-2xl font-extrabold text-gray-900">{card.value}</p>
               <p className="text-sm text-gray-500">{card.label}</p>
-            </div>
+            </Link>
           ))}
         </div>
 

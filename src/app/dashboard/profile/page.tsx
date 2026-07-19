@@ -58,7 +58,7 @@ export default function ProfilePage() {
         <div className="flex justify-center mb-8">
           <div className="relative w-24 h-24 rounded-full overflow-hidden bg-gray-200 shadow-lg">
             {imageUrl ? (
-              <img src={imageUrl} alt="Profile" className="w-full h-full object-cover" />
+              <img src={imageUrl} alt="Profile" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-emerald-100 text-emerald-700 text-3xl font-bold">
                 {user?.name?.charAt(0).toUpperCase() || "U"}
