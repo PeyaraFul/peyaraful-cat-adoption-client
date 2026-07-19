@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { Cat, Story, AdoptionRequest, User } from '@/types';
+import toast from 'react-hot-toast';
+
+const getErrorMessage = (error: any): string => {
+  return error?.response?.data?.message || error?.message || 'Something went wrong';
+};
 
 // Public Stats
 export const usePublicStats = () => {
@@ -47,7 +52,13 @@ export const useCreateCat = () => {
       const res = await api.post('/api/cats', data);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cats'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cats'] });
+      toast.success('Cat listing created successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -62,6 +73,10 @@ export const useUpdateCat = () => {
       queryClient.invalidateQueries({ queryKey: ['cats'] });
       queryClient.invalidateQueries({ queryKey: ['cat'] });
       queryClient.invalidateQueries({ queryKey: ['admin', 'cats'] });
+      toast.success('Cat updated successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
     }
   });
 };
@@ -73,7 +88,13 @@ export const useDeleteCat = () => {
       const res = await api.delete(`/api/cats/${id}`);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cats'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cats'] });
+      toast.success('Cat deleted successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -105,7 +126,13 @@ export const useCreateStory = () => {
       const res = await api.post('/api/stories', data);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['stories'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stories'] });
+      toast.success('Story shared successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -116,7 +143,13 @@ export const useDeleteStory = () => {
       const res = await api.delete(`/api/stories/${id}`);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['stories'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stories'] });
+      toast.success('Story deleted successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -128,7 +161,13 @@ export const useCreateAdoption = () => {
       const res = await api.post('/api/adoptions', data);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adoptions'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adoptions'] });
+      toast.success('Adoption request sent!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -159,7 +198,13 @@ export const useApproveRequest = () => {
       const res = await api.put(`/api/adoptions/${id}/approve`);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adoptions'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adoptions'] });
+      toast.success('Adoption request approved!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -170,7 +215,13 @@ export const useRejectRequest = () => {
       const res = await api.put(`/api/adoptions/${id}/reject`);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adoptions'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adoptions'] });
+      toast.success('Adoption request rejected');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -182,7 +233,13 @@ export const useUpdateProfile = () => {
       const res = await api.put('/api/auth/profile', data);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['auth', 'me'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+      toast.success('Profile updated successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -235,7 +292,13 @@ export const useDeleteUser = () => {
       const res = await api.delete(`/api/admin/users/${id}`);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'users'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
+      toast.success('User deleted successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };
 
@@ -246,6 +309,12 @@ export const useDeleteCatAdmin = () => {
       const res = await api.delete(`/api/admin/cats/${id}`);
       return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'cats'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cats'] });
+      toast.success('Cat deleted successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error));
+    }
   });
 };

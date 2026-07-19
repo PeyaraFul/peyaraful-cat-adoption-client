@@ -13,10 +13,21 @@ export default function NewStoryPage() {
   const [catName, setCatName] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [errors, setErrors] = useState<{ catName?: string; content?: string; image?: string }>({});
+
+  const validate = () => {
+    const errs: typeof errors = {};
+    if (!catName.trim()) errs.catName = "Cat name is required";
+    if (!content.trim()) errs.content = "Story content is required";
+    else if (content.trim().length < 10) errs.content = "Story must be at least 10 characters";
+    if (imageUrl && !/^https?:\/\/.+\..+/.test(imageUrl)) errs.image = "Please enter a valid URL";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!catName.trim() || !content.trim()) return;
+    if (!validate()) return;
 
     createStory.mutate(
       { catName: catName.trim(), content: content.trim(), image: imageUrl || undefined },
@@ -51,9 +62,9 @@ export default function NewStoryPage() {
                 value={catName}
                 onChange={(e) => setCatName(e.target.value)}
                 placeholder="Name of the cat you adopted"
-                required
-                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 ${errors.catName ? "border-red-500" : ""}`}
               />
+              {errors.catName && <p className="text-red-500 text-sm mt-1">{errors.catName}</p>}
             </div>
 
             {/* Content */}
@@ -65,10 +76,10 @@ export default function NewStoryPage() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Tell us about your experience adopting this cat..."
-                required
                 rows={6}
-                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 resize-none"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 resize-none ${errors.content ? "border-red-500" : ""}`}
               />
+              {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content}</p>}
             </div>
 
             {/* Image URL */}
@@ -82,8 +93,9 @@ export default function NewStoryPage() {
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="https://example.com/cat-photo.jpg"
-                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 ${errors.image ? "border-red-500" : ""}`}
               />
+              {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
               {imageUrl && (
                 <div className="mt-3 relative h-40 rounded-lg overflow-hidden">
                   <img
@@ -98,7 +110,7 @@ export default function NewStoryPage() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={createStory.isPending || !catName.trim() || !content.trim()}
+              disabled={createStory.isPending}
               className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-bold py-3 rounded-lg transition-colors"
             >
               {createStory.isPending ? "Posting..." : "Share Story"}

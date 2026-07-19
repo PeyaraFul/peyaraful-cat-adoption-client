@@ -164,15 +164,11 @@ export default function ProfilePage() {
           {/* Submit */}
           <button
             type="submit"
-            disabled={updateProfile.isPending}
+            disabled={updateProfile.isPending || !name.trim()}
             className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-bold py-3 rounded-lg transition-colors"
           >
             {updateProfile.isPending ? "Saving..." : "Save Changes"}
           </button>
-
-          {updateProfile.isSuccess && (
-            <p className="text-center text-emerald-600 font-medium">Profile updated successfully!</p>
-          )}
         </form>
       </div>
     </div>
