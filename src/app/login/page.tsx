@@ -35,7 +35,6 @@ export default function LoginPage() {
       });
       await login(res.data.token);
       toast.success('Logged in successfully!');
-      router.push('/dashboard');
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Login failed. Please try again.');
     }

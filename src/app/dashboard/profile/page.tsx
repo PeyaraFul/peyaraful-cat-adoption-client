@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { FaUser, FaPhone, FaMapMarkerAlt, FaInfoCircle, FaImage } from "react-icons/fa";
 
 export default function ProfilePage() {
-  const { user, loading: authLoading, setUser } = useAuth();
+  const { user, loading: authLoading, refreshUser } = useAuth();
   const updateProfile = useUpdateProfile();
 
   const [name, setName] = useState("");
@@ -31,8 +31,8 @@ export default function ProfilePage() {
     updateProfile.mutate(
       { name: name.trim(), phone: phone.trim(), location: location.trim(), bio: bio.trim(), image: imageUrl.trim() },
       {
-        onSuccess: (res) => {
-          setUser(res.user);
+        onSuccess: async () => {
+          await refreshUser();
         },
       }
     );

@@ -82,7 +82,7 @@ export default function AdminDashboardPage() {
                   outerRadius={100}
                   paddingAngle={5}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                 >
                   {catStatusData.map((_, index) => (
                     <Cell key={index} fill={COLORS[index]} />

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/providers/AuthProvider';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -13,7 +14,9 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const isLoggedIn = false; // Placeholder until Task 16
+  const { user, logout } = useAuth();
+  const isLoggedIn = !!user;
+  const isAdmin = user?.role === 'admin';
 
   return (
     <nav className="w-full bg-white shadow-md sticky top-0 z-50">
@@ -45,16 +48,46 @@ export default function Navbar() {
           {/* Desktop Auth */}
           <div className="hidden md:flex items-center gap-3">
             {isLoggedIn ? (
-              <Link
-                href="/dashboard"
-                className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${
-                  pathname.startsWith('/dashboard')
-                    ? 'bg-emerald-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                Dashboard
-              </Link>
+              <>
+                {isAdmin && (
+                  <Link
+                    href="/dashboard/admin"
+                    className={`text-sm font-medium px-3 py-2 rounded-lg transition-colors ${
+                      pathname.startsWith('/dashboard/admin')
+                        ? 'bg-yellow-400 text-gray-900'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    Admin
+                  </Link>
+                )}
+                <Link
+                  href="/dashboard"
+                  className={`text-sm font-medium px-3 py-2 rounded-lg transition-colors ${
+                    pathname === '/dashboard'
+                      ? 'bg-emerald-600 text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+                <div className="flex items-center gap-2">
+                  {user.image ? (
+                    <img src={user.image} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">
+                      {user.name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
+                  <span className="text-sm font-medium text-gray-700 max-w-[100px] truncate">{user.name}</span>
+                </div>
+                <button
+                  onClick={logout}
+                  className="text-sm font-medium px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <Link
                 href="/login"
@@ -107,17 +140,48 @@ export default function Navbar() {
             ))}
             <hr />
             {isLoggedIn ? (
-              <Link
-                href="/dashboard"
-                onClick={() => setMobileOpen(false)}
-                className={`block px-3 py-2 rounded-lg text-sm font-medium ${
-                  pathname.startsWith('/dashboard')
-                    ? 'bg-emerald-50 text-emerald-600'
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Dashboard
-              </Link>
+              <>
+                <div className="flex items-center gap-3 px-3 py-2">
+                  {user.image ? (
+                    <img src={user.image} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">
+                      {user.name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
+                  <span className="text-sm font-medium text-gray-700">{user.name}</span>
+                </div>
+                {isAdmin && (
+                  <Link
+                    href="/dashboard/admin"
+                    onClick={() => setMobileOpen(false)}
+                    className={`block px-3 py-2 rounded-lg text-sm font-medium ${
+                      pathname.startsWith('/dashboard/admin')
+                        ? 'bg-yellow-50 text-yellow-700'
+                        : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileOpen(false)}
+                  className={`block px-3 py-2 rounded-lg text-sm font-medium ${
+                    pathname === '/dashboard'
+                      ? 'bg-emerald-50 text-emerald-600'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => { logout(); setMobileOpen(false); }}
+                  className="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <Link
                 href="/login"
