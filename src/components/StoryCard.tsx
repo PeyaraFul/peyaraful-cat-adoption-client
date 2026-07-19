@@ -65,7 +65,7 @@ export default function StoryCard({ story }: StoryCardProps) {
             liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
           }`}
         >
-          <FaHeart className={liked ? "text-red-500" : "text-red-400"} />
+          <FaHeart className={liked ? "text-red-500" : "text-gray-400"} />
           <span>{story.likes} likes</span>
         </button>
       </div>
