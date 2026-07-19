@@ -125,6 +125,19 @@ export const useStories = () => {
   });
 };
 
+export const useLikeStory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await api.post(`/api/stories/${id}/like`);
+      return res.data as { likes: number };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stories'] });
+    },
+  });
+};
+
 export const useTopStories = () => {
   return useQuery<Story[]>({
     queryKey: ['stories', 'top'],

@@ -3,12 +3,15 @@
 import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
 import { Story } from "@/types";
+import { useLikeStory } from "@/hooks/useApi";
 
 interface StoryCardProps {
   story: Story;
 }
 
 export default function StoryCard({ story }: StoryCardProps) {
+  const { mutate: likeStory, isPending } = useLikeStory();
+
   return (
     <div className="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow overflow-hidden">
       {story.image && (
@@ -52,10 +55,14 @@ export default function StoryCard({ story }: StoryCardProps) {
         </h3>
         <p className="text-gray-600 text-sm line-clamp-3">{story.content}</p>
 
-        <div className="flex items-center gap-2 mt-4 pt-3 border-t text-sm text-gray-500">
+        <button
+          onClick={() => likeStory(story._id)}
+          disabled={isPending}
+          className="flex items-center gap-2 mt-4 pt-3 border-t text-sm text-gray-500 hover:text-red-500 transition-colors disabled:opacity-50 cursor-pointer"
+        >
           <FaHeart className="text-red-400" />
           <span>{story.likes} likes</span>
-        </div>
+        </button>
       </div>
     </div>
   );
