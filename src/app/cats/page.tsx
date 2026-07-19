@@ -45,7 +45,15 @@ function CatsContent() {
   if (age) filters.age = age;
 
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useInfiniteCats(filters);
-  const cats = data?.pages.flatMap((p) => p.cats).filter(Boolean) ?? [];
+  const cats = (() => {
+    const flat = data?.pages.flatMap((p) => p.cats).filter(Boolean) ?? [];
+    const seen = new Set<string>();
+    return flat.filter((c) => {
+      if (seen.has(c._id)) return false;
+      seen.add(c._id);
+      return true;
+    });
+  })();
   const totalCount = data?.pages[0]?.total ?? 0;
 
   // Sync URL params on change
