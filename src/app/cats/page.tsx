@@ -1,9 +1,9 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaSearch, FaSlidersH, FaTimes } from "react-icons/fa";
-import { useCats } from "@/hooks/useApi";
+import { useInfiniteCats } from "@/hooks/useApi";
 import CatCard from "@/components/CatCard";
 import CatCardSkeleton from "@/components/skeletons/CatCardSkeleton";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -30,6 +30,7 @@ export default function CatsPage() {
 function CatsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [location, setLocation] = useState(searchParams.get("location") || "");
@@ -43,7 +44,9 @@ function CatsContent() {
   if (gender) filters.gender = gender;
   if (age) filters.age = age;
 
-  const { data: cats, isLoading } = useCats(filters);
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useInfiniteCats(filters);
+  const cats = data?.pages.flatMap((p) => p.cats) ?? [];
+  const totalCount = data?.pages[0]?.total ?? 0;
 
   // Sync URL params on change
   useEffect(() => {
@@ -55,6 +58,25 @@ function CatsContent() {
     const qs = params.toString();
     router.replace(`/cats${qs ? `?${qs}` : ""}`, { scroll: false });
   }, [search, location, gender, age, router]);
+
+  // IntersectionObserver for infinite scroll
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    [hasNextPage, isFetchingNextPage, fetchNextPage]
+  );
+
+  useEffect(() => {
+    const el = loadMoreRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(handleObserver, { rootMargin: "200px" });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [handleObserver]);
 
   const clearFilters = () => {
     setSearch("");
@@ -144,7 +166,7 @@ function CatsContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold">Browse Cats</h1>
           <p className="text-emerald-100 mt-1">
-            Find your perfect companion from {cats?.length ?? 0} cats
+            Find your perfect companion from {totalCount} cats
           </p>
         </div>
       </div>
@@ -200,7 +222,7 @@ function CatsContent() {
                   <CatCardSkeleton key={i} />
                 ))}
               </div>
-            ) : !cats || cats.length === 0 ? (
+            ) : cats.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-500 text-lg">No cats found matching your filters.</p>
                 {hasActiveFilters && (
@@ -213,11 +235,27 @@ function CatsContent() {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {cats.map((cat) => (
-                  <CatCard key={cat._id} cat={cat} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {cats.map((cat) => (
+                    <CatCard key={cat._id} cat={cat} />
+                  ))}
+                </div>
+
+                {/* Load more trigger */}
+                <div ref={loadMoreRef} className="py-8 flex justify-center">
+                  {isFetchingNextPage && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <CatCardSkeleton key={i} />
+                      ))}
+                    </div>
+                  )}
+                  {!hasNextPage && cats.length > 0 && (
+                    <p className="text-gray-400 text-sm">You have seen all available cats</p>
+                  )}
+                </div>
+              </>
             )}
           </main>
         </div>

@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { Cat, Story, AdoptionRequest, User } from '@/types';
 import toast from 'react-hot-toast';
@@ -24,9 +24,25 @@ export const useCats = (filters?: Record<string, string>) => {
     queryKey: ['cats', filters],
     queryFn: async () => {
       const params = new URLSearchParams(filters).toString();
-      const res = await api.get(`/api/cats?${params}`);
-      return res.data;
+      const res = await api.get(`/api/cats?limit=100&${params}`);
+      return res.data.cats;
     }
+  });
+};
+
+export const useInfiniteCats = (filters?: Record<string, string>) => {
+  return useInfiniteQuery({
+    queryKey: ['cats', 'infinite', filters],
+    queryFn: async ({ pageParam = 1 }) => {
+      const params = new URLSearchParams(filters).toString();
+      const res = await api.get(`/api/cats?page=${pageParam}&limit=12&${params}`);
+      return res.data as { cats: Cat[]; total: number; page: number; limit: number };
+    },
+    getNextPageParam: (lastPage) => {
+      const { page, limit, total } = lastPage;
+      return page * limit < total ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
   });
 };
 
