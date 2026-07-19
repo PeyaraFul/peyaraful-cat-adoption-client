@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaHeart, FaUsers, FaCat, FaPaw } from "react-icons/fa";
 import { useCats, useTopStories, usePublicStats, useLikeStory } from "@/hooks/useApi";
+import { useAuth } from "@/providers/AuthProvider";
 import { Skeleton } from "@/components/ui/Skeleton";
 import HeroSection from "@/components/HeroSection";
 
@@ -12,6 +13,7 @@ export default function Home() {
   const { data: stories, isLoading: storiesLoading } = useTopStories();
   const { data: stats, isLoading: statsLoading } = usePublicStats();
   const { mutate: likeStory } = useLikeStory();
+  const { user } = useAuth();
 
   const latestCats = cats?.slice(0, 8) || [];
 
@@ -123,13 +125,20 @@ export default function Home() {
                     {story.userName} adopted {story.catName}
                   </h3>
                   <p className="text-gray-600 text-sm line-clamp-3">{story.content}</p>
-                  <button
-                    onClick={() => likeStory(story._id)}
-                    className="flex items-center gap-2 mt-4 pt-3 border-t text-sm text-gray-500 hover:text-red-500 transition-colors w-full cursor-pointer"
-                  >
-                    <FaHeart className="text-red-400" />
-                    <span>{story.likes} likes</span>
-                  </button>
+                  {(() => {
+                    const liked = user ? (story.likedBy || []).includes(user._id) : false;
+                    return (
+                      <button
+                        onClick={() => likeStory(story._id)}
+                        className={`flex items-center gap-2 mt-4 pt-3 border-t text-sm transition-colors w-full cursor-pointer ${
+                          liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
+                        }`}
+                      >
+                        <FaHeart className={liked ? "text-red-500" : "text-red-400"} />
+                        <span>{story.likes} likes</span>
+                      </button>
+                    );
+                  })()}
                 </div>
               ))}
             </div>

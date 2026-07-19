@@ -130,10 +130,13 @@ export const useLikeStory = () => {
   return useMutation({
     mutationFn: async (id: string) => {
       const res = await api.post(`/api/stories/${id}/like`);
-      return res.data as { likes: number };
+      return res.data as { likes: number; liked: boolean };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['stories'] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || 'Please log in to like stories');
     },
   });
 };

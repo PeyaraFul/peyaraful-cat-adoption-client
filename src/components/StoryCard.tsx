@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
 import { Story } from "@/types";
 import { useLikeStory } from "@/hooks/useApi";
+import { useAuth } from "@/providers/AuthProvider";
 
 interface StoryCardProps {
   story: Story;
@@ -11,6 +12,8 @@ interface StoryCardProps {
 
 export default function StoryCard({ story }: StoryCardProps) {
   const { mutate: likeStory, isPending } = useLikeStory();
+  const { user } = useAuth();
+  const liked = user ? (story.likedBy || []).includes(user._id) : false;
 
   return (
     <div className="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow overflow-hidden">
@@ -58,9 +61,11 @@ export default function StoryCard({ story }: StoryCardProps) {
         <button
           onClick={() => likeStory(story._id)}
           disabled={isPending}
-          className="flex items-center gap-2 mt-4 pt-3 border-t text-sm text-gray-500 hover:text-red-500 transition-colors disabled:opacity-50 cursor-pointer"
+          className={`flex items-center gap-2 mt-4 pt-3 border-t text-sm transition-colors disabled:opacity-50 cursor-pointer w-full ${
+            liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
+          }`}
         >
-          <FaHeart className="text-red-400" />
+          <FaHeart className={liked ? "text-red-500" : "text-red-400"} />
           <span>{story.likes} likes</span>
         </button>
       </div>

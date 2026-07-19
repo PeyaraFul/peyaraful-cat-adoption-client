@@ -37,6 +37,7 @@ export interface Story {
   content: string;
   image: string;
   likes: number;
+  likedBy: string[];
   createdAt: string;
 }
 
