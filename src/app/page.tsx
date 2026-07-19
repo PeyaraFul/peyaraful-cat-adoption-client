@@ -12,7 +12,7 @@ export default function Home() {
   const { data: stories, isLoading: storiesLoading } = useTopStories();
   const { data: stats, isLoading: statsLoading } = usePublicStats();
 
-  const latestCats = cats?.slice(0, 6) || [];
+  const latestCats = cats?.slice(0, 8) || [];
 
   return (
     <>
@@ -20,15 +20,15 @@ export default function Home() {
 
       {/* Latest Posts Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900">Latest Cats</h2>
             <p className="text-gray-600 mt-2">Meet our newest cat friends looking for a home</p>
           </div>
 
           {catsLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="bg-white rounded-2xl shadow overflow-hidden">
                   <Skeleton className="h-56 w-full" />
                   <div className="p-4 space-y-3">
@@ -42,7 +42,7 @@ export default function Home() {
           ) : latestCats.length === 0 ? (
             <p className="text-center text-gray-500">No cats available yet.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {latestCats.map((cat) => (
                 <Link
                   key={cat._id}
